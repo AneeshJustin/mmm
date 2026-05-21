@@ -91,7 +91,6 @@ export async function recordInvitationVideo(
 
   const overlayCanvas = await captureVideoOverlay(container)
   const clipDuration = getClipDurationSec(config, video)
-  const totalFrames = Math.ceil(clipDuration * FPS)
 
   const canvas = document.createElement("canvas")
   canvas.width = width
@@ -118,31 +117,44 @@ export async function recordInvitationVideo(
     recorder.onerror = () => reject(new Error("Recording failed"))
   })
 
-  recorder.start(200)
-  await seekVideo(video, config.startSec)
+  // Start playback, draw the first frame, then start the recorder so it
+  // never captures a blank canvas at the beginning.
   await video.play()
+  ctx.drawImage(video, 0, 0, width, height)
+  ctx.drawImage(overlayCanvas, 0, 0, width, height)
+  recorder.start(100)
 
-  let frame = 0
+  // Use wall-clock time instead of frame counting so the clip length is
+  // correct regardless of display refresh rate (60 Hz vs 30 FPS target).
+  const durationMs = clipDuration * 1000
+  const startTime = performance.now()
 
   await new Promise<void>((resolve) => {
     const drawFrame = () => {
-      if (frame >= totalFrames) {
+      if (performance.now() - startTime >= durationMs) {
         recorder.stop()
         video.pause()
         resolve()
         return
       }
 
+      // Loop within the configured clip segment without an async seek so
+      // we never stall the frame loop.
       if (
         config.endSec !== undefined &&
+        !video.seeking &&
         video.currentTime >= config.endSec - 0.05
       ) {
-        void seekVideo(video, config.startSec)
+        video.currentTime = config.startSec
       }
 
-      ctx.drawImage(video, 0, 0, width, height)
-      ctx.drawImage(overlayCanvas, 0, 0, width, height)
-      frame++
+      // Skip drawing while seeking to avoid black frames; the canvas
+      // retains its last valid frame during the brief seek.
+      if (!video.seeking) {
+        ctx.drawImage(video, 0, 0, width, height)
+        ctx.drawImage(overlayCanvas, 0, 0, width, height)
+      }
+
       requestAnimationFrame(drawFrame)
     }
 

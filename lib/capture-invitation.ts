@@ -75,7 +75,19 @@ function mirrorResolvedStyles(source: Element, target: Element) {
     targetEl.style.setProperty("background-color", bg)
   }
 
-  targetEl.style.setProperty("background-image", "none")
+  // Keep CSS gradients (they render fine in html2canvas) but strip
+  // external URLs and any oklch/lab values that html2canvas can't parse.
+  const bgImage = computed.backgroundImage
+  if (
+    bgImage &&
+    bgImage !== "none" &&
+    !hasUnsupportedColor(bgImage) &&
+    !bgImage.includes("url(")
+  ) {
+    targetEl.style.setProperty("background-image", bgImage)
+  } else {
+    targetEl.style.setProperty("background-image", "none")
+  }
   targetEl.style.setProperty("transform", "none")
   targetEl.style.setProperty("animation", "none")
   targetEl.style.setProperty("transition", "none")
@@ -144,7 +156,12 @@ async function captureInCleanIframe(
     const clone = sourceRoot.cloneNode(true) as HTMLElement
     mirrorTree(sourceRoot, clone)
 
-    if (!hasVideo) {
+    if (hasVideo) {
+      // The root element may have an opaque fallback background (e.g.
+      // bg-stone-100) from mirrorTree. Force it transparent so the video
+      // frame drawn underneath the overlay canvas shows through correctly.
+      clone.style.setProperty("background-color", "transparent")
+    } else {
       applyReligionBackground(clone)
     }
 
