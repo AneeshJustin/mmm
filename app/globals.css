@@ -63,9 +63,9 @@
 }
 
 @theme inline {
-  --font-sans: 'Cormorant Garamond', 'Georgia', serif;
+  --font-sans: 'Inter', 'Helvetica Neue', Arial, sans-serif;
   --font-serif: 'Cormorant Garamond', 'Georgia', serif;
-  --font-mono: 'Geist Mono', 'Geist Mono Fallback';
+  --font-mono: 'Geist Mono', 'Courier New', monospace;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -209,4 +209,22 @@ html {
 
 ::-webkit-scrollbar-thumb:hover {
   background: var(--kerala-green);
+}
+
+/* ─── Preview font override ────────────────────────────────────────────────
+   Written outside any @layer so it beats Tailwind's @layer utilities rules.
+   Targets the preview container AND every descendant so no element is missed,
+   regardless of its own Tailwind font-weight / font-size classes.
+   ───────────────────────────────────────────────────────────────────────── */
+[data-font-style="font-serif"],
+[data-font-style="font-serif"] * {
+  font-family: 'Cormorant Garamond', 'Georgia', serif;
+}
+[data-font-style="font-sans"],
+[data-font-style="font-sans"] * {
+  font-family: 'Inter', 'Helvetica Neue', Arial, sans-serif;
+}
+[data-font-style="font-mono"],
+[data-font-style="font-mono"] * {
+  font-family: 'Geist Mono', 'Courier New', monospace;
 }

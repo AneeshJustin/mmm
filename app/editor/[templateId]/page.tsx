@@ -479,6 +479,7 @@ export default function EditorPage() {
               <div className="p-6">
                 <div
                   ref={previewRef}
+                  data-font-style={data.fontStyle}
                   className={
                     isStoryTemplate
                       ? isPreviewMode
@@ -520,6 +521,7 @@ function InvitationPreview({
     return (
       <VideoInvitation
         template={template}
+        className={data.fontStyle}
         data={{
           brideName: data.brideName,
           groomName: data.groomName,
@@ -538,7 +540,7 @@ function InvitationPreview({
         template={template}
         data={toScrollStoryData(data)}
         compact
-        className="h-full w-full"
+        className={`h-full w-full ${data.fontStyle}`}
       />
     )
   }
