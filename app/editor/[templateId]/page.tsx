@@ -20,7 +20,7 @@ import { VideoInvitation } from "@/components/video-invitation"
 import { ScrollStoryInvitation } from "@/components/scroll-story/scroll-story-invitation"
 import { getTemplateVideo, supportsVideoDownload } from "@/lib/template-videos"
 import { saveInvitationData, toScrollStoryData } from "@/lib/invitation-storage"
-import { ArrowLeft, Download, Share2, Eye, Edit3, Type, Calendar, MapPin, Image as ImageIcon, Palette, Heart, ExternalLink } from "lucide-react"
+import { ArrowLeft, Download, Share2, Eye, Edit3, Type, Calendar, MapPin, Image as ImageIcon, Palette, Heart, ExternalLink, ShoppingCart } from "lucide-react"
 
 interface InvitationData {
   brideName: string
@@ -178,7 +178,7 @@ export default function EditorPage() {
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center gap-4">
             <button
-              onClick={() => router.back()}
+              onClick={() => router.push("/templates")}
               className="p-2 hover:bg-kerala-green/20 rounded-lg transition-colors"
             >
               <ArrowLeft size={24} />
@@ -229,11 +229,19 @@ export default function EditorPage() {
               <span className="hidden sm:inline">RSVP</span>
             </Link>
 
+            <Link
+              href={`/payment?templateId=${templateId}`}
+              className="flex items-center gap-2 px-4 py-2 bg-kerala-gold text-kerala-dark rounded-lg hover:bg-kerala-ivory transition-colors font-semibold"
+            >
+              <ShoppingCart size={18} />
+              <span className="hidden sm:inline">Buy ₹3,999</span>
+            </Link>
+
             <button
               type="button"
               disabled={isDownloading}
               onClick={runDownload}
-              className="flex items-center gap-2 px-4 py-2 bg-kerala-gold text-kerala-dark rounded-lg hover:bg-kerala-ivory transition-colors disabled:opacity-50"
+              className="flex items-center gap-2 px-4 py-2 bg-kerala-green/20 hover:bg-kerala-green/30 transition-colors rounded-lg disabled:opacity-50"
             >
               <Download size={18} />
               <span className="hidden sm:inline">

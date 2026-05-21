@@ -99,9 +99,11 @@ export function TemplateCoverflowCarousel({
                 className="min-w-0 shrink-0 grow-0 basis-[78%] sm:basis-[58%] md:basis-[46%] lg:basis-[38%] flex justify-center px-2 md:px-4"
                 style={{ transformStyle: "preserve-3d" }}
               >
-                <button
-                  type="button"
-                  onClick={() => emblaApi?.scrollTo(index)}
+                <div
+                  role="button"
+                  tabIndex={isActive ? -1 : 0}
+                  onClick={() => !isActive && emblaApi?.scrollTo(index)}
+                  onKeyDown={(e) => { if ((e.key === "Enter" || e.key === " ") && !isActive) emblaApi?.scrollTo(index) }}
                   className={cn(
                     "w-full max-w-[280px] text-left transition-all duration-500 ease-out",
                     "focus:outline-none focus-visible:ring-2 focus-visible:ring-kerala-gold focus-visible:ring-offset-2 rounded-2xl",
@@ -152,12 +154,21 @@ export function TemplateCoverflowCarousel({
                           </span>
                         )}
                       </div>
-                      <h3 className="font-bold text-kerala-dark text-sm md:text-base line-clamp-2">
-                        {template.name}
-                      </h3>
+                      <div className="flex items-center justify-between gap-2 mt-1">
+                        <h3 className="font-bold text-kerala-dark text-sm md:text-base line-clamp-2">
+                          {template.name}
+                        </h3>
+                        <Link
+                          href={`/payment?templateId=${template.id}`}
+                          onClick={(e) => e.stopPropagation()}
+                          className="shrink-0 px-2.5 py-1 rounded-full bg-kerala-gold/20 hover:bg-kerala-gold/40 text-kerala-dark text-xs font-semibold transition-colors"
+                        >
+                          ₹3,999
+                        </Link>
+                      </div>
                     </div>
                   </div>
-                </button>
+                </div>
               </div>
             )
           })}
