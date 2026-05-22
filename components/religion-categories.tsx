@@ -1,7 +1,7 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Link from "next/link"
+import { motion } from "framer-motion";
+import Link from "next/link";
 
 const categories = [
   {
@@ -14,7 +14,10 @@ const categories = [
     bgColor: "bg-gradient-to-br from-orange-50 to-red-50",
     icon: (
       <svg viewBox="0 0 60 60" className="w-16 h-16">
-        <path fill="#d4af37" d="M30 5L35 20H45L37 30L40 45L30 37L20 45L23 30L15 20H25L30 5Z" />
+        <path
+          fill="#d4af37"
+          d="M30 5L35 20H45L37 30L40 45L30 37L20 45L23 30L15 20H25L30 5Z"
+        />
         <circle cx="30" cy="35" r="8" fill="#c41e3a" />
         <path fill="#d4af37" d="M26 33h8v4h-8z" />
       </svg>
@@ -30,8 +33,14 @@ const categories = [
     bgColor: "bg-gradient-to-br from-emerald-50 to-teal-50",
     icon: (
       <svg viewBox="0 0 60 60" className="w-16 h-16">
-        <path fill="#065f46" d="M30 5C25 15 20 20 20 30C20 40 25 50 30 55C35 50 40 40 40 30C40 20 35 15 30 5Z" />
-        <path fill="#d4af37" d="M30 15L32 20L37 20L33 24L35 30L30 26L25 30L27 24L23 20L28 20L30 15Z" />
+        <path
+          fill="#065f46"
+          d="M30 5C25 15 20 20 20 30C20 40 25 50 30 55C35 50 40 40 40 30C40 20 35 15 30 5Z"
+        />
+        <path
+          fill="#d4af37"
+          d="M30 15L32 20L37 20L33 24L35 30L30 26L25 30L27 24L23 20L28 20L30 15Z"
+        />
       </svg>
     ),
   },
@@ -47,11 +56,18 @@ const categories = [
       <svg viewBox="0 0 60 60" className="w-16 h-16">
         <rect x="27" y="10" width="6" height="40" fill="#d4af37" />
         <rect x="18" y="20" width="24" height="6" fill="#d4af37" />
-        <circle cx="30" cy="15" r="5" fill="none" stroke="#d4af37" strokeWidth="2" />
+        <circle
+          cx="30"
+          cy="15"
+          r="5"
+          fill="none"
+          stroke="#d4af37"
+          strokeWidth="2"
+        />
       </svg>
     ),
   },
-]
+];
 
 export function ReligionCategories() {
   return (
@@ -71,7 +87,8 @@ export function ReligionCategories() {
             Choose Your <span className="text-kerala-green">Tradition</span>
           </h2>
           <p className="text-xl text-kerala-dark/60 max-w-2xl mx-auto">
-            Each template is crafted to honor the unique customs and aesthetics of Kerala&apos;s diverse wedding traditions
+            Each template is crafted to honor the unique customs and aesthetics
+            of Kerala&apos;s diverse wedding traditions
           </p>
         </motion.div>
 
@@ -81,19 +98,38 @@ export function ReligionCategories() {
               key={category.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
+              whileHover={{ y: -8, scale: 1.02 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6, delay: index * 0.2 }}
             >
               <Link href={category.href}>
-                <div className={`${category.bgColor} rounded-3xl p-8 h-full premium-card border border-kerala-gold/10 hover:border-kerala-gold/30`}>
+                <div
+                  className={`${category.bgColor} rounded-3xl p-8 h-full premium-card border border-kerala-gold/10 hover:border-kerala-gold/30 group`}
+                >
                   <div className="mb-6">{category.icon}</div>
-                  <h3 className="text-2xl font-bold text-kerala-dark mb-2">{category.title}</h3>
-                  <p className="text-kerala-green font-medium mb-3">{category.subtitle}</p>
-                  <p className="text-kerala-dark/60 mb-6">{category.description}</p>
+                  <h3 className="text-2xl font-bold text-kerala-dark mb-2">
+                    {category.title}
+                  </h3>
+                  <p className="text-kerala-green font-medium mb-3">
+                    {category.subtitle}
+                  </p>
+                  <p className="text-kerala-dark/60 mb-6">
+                    {category.description}
+                  </p>
                   <div className="flex items-center text-kerala-green font-medium">
                     <span>Explore Templates</span>
-                    <svg className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    <svg
+                      className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M17 8l4 4m0 0l-4 4m4-4H3"
+                      />
                     </svg>
                   </div>
                 </div>
@@ -103,5 +139,5 @@ export function ReligionCategories() {
         </div>
       </div>
     </section>
-  )
+  );
 }

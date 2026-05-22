@@ -1,25 +1,47 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Link from "next/link"
-import { AnimatedPetals } from "@/components/animated-petals"
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { AnimatedPetals } from "@/components/animated-petals";
 
 export function HeroSection() {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-kerala-dark">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-10">
-        <svg className="w-full h-full" viewBox="0 0 100 100" preserveAspectRatio="none">
-          <pattern id="kerala-pattern" x="0" y="0" width="20" height="20" patternUnits="userSpaceOnUse">
+        <svg
+          className="w-full h-full"
+          viewBox="0 0 100 100"
+          preserveAspectRatio="none"
+        >
+          <pattern
+            id="kerala-pattern"
+            x="0"
+            y="0"
+            width="20"
+            height="20"
+            patternUnits="userSpaceOnUse"
+          >
             <circle cx="10" cy="10" r="1" fill="#d4af37" />
-            <path d="M0 10 Q5 5 10 10 Q15 15 20 10" stroke="#d4af37" fill="none" strokeWidth="0.5" />
+            <path
+              d="M0 10 Q5 5 10 10 Q15 15 20 10"
+              stroke="#d4af37"
+              fill="none"
+              strokeWidth="0.5"
+            />
           </pattern>
           <rect width="100%" height="100%" fill="url(#kerala-pattern)" />
         </svg>
       </div>
 
       {/* Floating Petals */}
-      <FloatingPetals />
+      <motion.div
+        className="absolute inset-0"
+        animate={{ y: [0, -10, 0] }}
+        transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+      >
+        <FloatingPetals />
+      </motion.div>
 
       {/* Main Content */}
       <div className="relative z-10 max-w-6xl mx-auto px-4 text-center">
@@ -50,8 +72,9 @@ export function HeroSection() {
           transition={{ duration: 0.8, delay: 0.6 }}
           className="text-xl md:text-2xl text-kerala-ivory/70 max-w-3xl mx-auto mb-10 font-light leading-relaxed"
         >
-          Create stunning, personalized wedding invitations that honor the rich traditions 
-          of Kerala. Hindu, Muslim, and Christian templates crafted with love.
+          Create stunning, personalized wedding invitations that honor the rich
+          traditions of Kerala. Hindu, Muslim, and Christian templates crafted
+          with love.
         </motion.p>
 
         <motion.div
@@ -62,7 +85,7 @@ export function HeroSection() {
         >
           <Link
             href="/templates"
-            className="px-8 py-4 bg-kerala-gold text-kerala-dark rounded-full font-semibold text-lg hover:bg-kerala-ivory transition-all duration-300 hover:shadow-xl hover:shadow-kerala-gold/30 animate-glow"
+            className="px-8 py-4 bg-kerala-gold text-kerala-dark rounded-full font-semibold text-lg hover:bg-kerala-ivory transition-all duration-300 hover:shadow-xl hover:shadow-kerala-gold/30 animate-glow transform hover:-translate-y-1 hover:scale-[1.02]"
           >
             Browse Templates
           </Link>
@@ -76,10 +99,11 @@ export function HeroSection() {
 
         {/* Decorative Lamp */}
         <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 1, delay: 1 }}
+          initial={{ opacity: 0, scale: 0.8, y: 16 }}
+          animate={{ opacity: 1, scale: 1, y: 0 }}
+          transition={{ duration: 1, delay: 1, ease: "easeOut" }}
           className="mt-16"
+          whileHover={{ y: -6, scale: 1.03 }}
         >
           <NilavilakkuLamp />
         </motion.div>
@@ -88,11 +112,11 @@ export function HeroSection() {
       {/* Bottom Gradient */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-kerala-ivory to-transparent" />
     </section>
-  )
+  );
 }
 
 function FloatingPetals() {
-  return <AnimatedPetals count={15} color="gold" />
+  return <AnimatedPetals count={15} color="gold" />;
 }
 
 function NilavilakkuLamp() {
@@ -100,35 +124,39 @@ function NilavilakkuLamp() {
     <div className="relative w-32 h-40 mx-auto">
       {/* Lamp Glow */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-20 h-20 bg-kerala-gold/30 rounded-full blur-xl animate-pulse" />
-      
+
       {/* Lamp SVG */}
       <svg viewBox="0 0 100 120" className="w-full h-full">
         {/* Flame */}
         <ellipse cx="50" cy="15" rx="8" ry="12" fill="#d4af37">
-          <animate attributeName="ry" values="12;14;12" dur="0.5s" repeatCount="indefinite" />
+          <animate
+            attributeName="ry"
+            values="12;14;12"
+            dur="0.5s"
+            repeatCount="indefinite"
+          />
         </ellipse>
         <ellipse cx="50" cy="15" rx="4" ry="8" fill="#fff5e0">
-          <animate attributeName="ry" values="8;10;8" dur="0.5s" repeatCount="indefinite" />
+          <animate
+            attributeName="ry"
+            values="8;10;8"
+            dur="0.5s"
+            repeatCount="indefinite"
+          />
         </ellipse>
-        
+
         {/* Lamp Body */}
-        <path
-          d="M35 30 Q50 25 65 30 L60 50 Q50 55 40 50 Z"
-          fill="#d4af37"
-        />
+        <path d="M35 30 Q50 25 65 30 L60 50 Q50 55 40 50 Z" fill="#d4af37" />
         <ellipse cx="50" cy="50" rx="15" ry="5" fill="#b8941f" />
-        
+
         {/* Stand */}
-        <path
-          d="M45 55 L45 90 Q50 95 55 90 L55 55"
-          fill="#d4af37"
-        />
-        
+        <path d="M45 55 L45 90 Q50 95 55 90 L55 55" fill="#d4af37" />
+
         {/* Base */}
         <ellipse cx="50" cy="95" rx="25" ry="8" fill="#d4af37" />
         <ellipse cx="50" cy="100" rx="30" ry="10" fill="#b8941f" />
         <ellipse cx="50" cy="105" rx="25" ry="8" fill="#d4af37" />
       </svg>
     </div>
-  )
+  );
 }

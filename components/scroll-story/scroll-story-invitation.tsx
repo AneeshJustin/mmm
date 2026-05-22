@@ -68,7 +68,7 @@ const themes = {
     tealDark: "#1e3a5f",
     gold: "#d4af37",
     cream: "#f8fafc",
-    pink: "rgba(226, 232, 240, 0.8)",
+    pink: "rgba(30, 58, 95, 0.65)",
     olive: "rgba(100, 116, 139, 0.85)",
   },
 };
@@ -195,7 +195,24 @@ export function ScrollStoryInvitation({
         scrollSnap={!compact}
       >
         <RealisticLanterns count={compact ? 12 : 22} />
-        <SectionReveal className="flex flex-col items-center justify-end text-center px-6 pb-16 pt-24 min-h-[inherit] max-w-lg mx-auto">
+        <SectionReveal className="relative flex flex-col items-center justify-end text-center px-6 pb-16 pt-24 min-h-[inherit] max-w-lg mx-auto">
+          {template.religion === "christian" && (
+            <motion.div
+              className="pointer-events-none absolute inset-x-0 top-10 flex justify-center"
+              initial={{ opacity: 0, scale: 0.92 }}
+              animate={{ opacity: 0.55, scale: 1 }}
+              transition={{
+                duration: 1.4,
+                repeat: Infinity,
+                repeatType: "reverse",
+              }}
+            >
+              <div className="relative w-24 h-24">
+                <div className="absolute left-1/2 top-0 h-12 w-1 -translate-x-1/2 rounded-full bg-amber-200/20" />
+                <div className="absolute left-0 top-1/2 h-1 w-12 -translate-y-1/2 rounded-full bg-amber-200/20" />
+              </div>
+            </motion.div>
+          )}
           <motion.p
             className="text-xs tracking-[0.35em] uppercase mb-4 text-amber-200/90"
             animate={{ opacity: [0.65, 1, 0.65] }}
@@ -322,14 +339,29 @@ export function ScrollStoryInvitation({
             {data.message}
           </p>
           {data.couplePhoto ? (
-            <motion.img
-              src={data.couplePhoto}
-              alt={coupleLine}
-              className="mt-8 w-36 h-36 md:w-44 md:h-44 rounded-full object-cover border-4 border-white/40 shadow-2xl mx-auto"
+            <motion.div
+              className="mt-8 relative"
               initial={{ scale: 0.92, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               transition={{ duration: 0.7 }}
-            />
+            >
+              {/* Glow effect */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <div className="absolute w-36 h-36 md:w-44 md:h-44 rounded-full bg-gradient-to-r from-amber-400/40 via-amber-300/40 to-amber-400/40 blur-2xl animate-pulse" />
+                {template.religion === "christian" && (
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div className="absolute h-16 w-1 rounded-full bg-amber-200/30" />
+                    <div className="absolute h-1 w-16 rounded-full bg-amber-200/30" />
+                  </div>
+                )}
+              </div>
+              {/* Photo container */}
+              <img
+                src={data.couplePhoto}
+                alt={coupleLine}
+                className="relative z-10 w-36 h-36 md:w-44 md:h-44 rounded-full object-cover border-4 border-amber-300/90 shadow-2xl mx-auto"
+              />
+            </motion.div>
           ) : (
             <motion.div
               className="mt-8 w-36 h-36 rounded-full border border-white/30 bg-white/10 backdrop-blur-md flex items-center justify-center"
@@ -517,6 +549,8 @@ export function ScrollStoryInvitation({
           <motion.div
             className="mt-10 inline-flex items-center gap-2 px-6 py-3 rounded-full border border-amber-200/35 text-amber-100/90 text-xs tracking-widest uppercase backdrop-blur-md bg-black/30"
             whileHover={{ scale: 1.05 }}
+            animate={{ y: [0, -4, 0], opacity: [0.85, 1, 0.85] }}
+            transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
           >
             <Music className="w-3.5 h-3.5" />
             With love, {coupleLine}

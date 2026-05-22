@@ -1,34 +1,59 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import { Play } from "lucide-react"
-import { AnimatedPetals } from "@/components/animated-petals"
-import { ReligionVideoBackground } from "@/components/religion-video-background"
-import { getTemplateVideo } from "@/lib/template-videos"
-import type { Template } from "@/components/featured-templates"
+import { motion } from "framer-motion";
+import { Play } from "lucide-react";
+import { AnimatedPetals } from "@/components/animated-petals";
+import { ReligionVideoBackground } from "@/components/religion-video-background";
+import { getTemplateVideo } from "@/lib/template-videos";
+import type { Template } from "@/components/featured-templates";
 
 export interface InvitationText {
-  brideName: string
-  groomName: string
-  message?: string
-  date?: string
-  time?: string
-  venue?: string
+  brideName: string;
+  groomName: string;
+  message?: string;
+  date?: string;
+  time?: string;
+  venue?: string;
+  couplePhoto?: string | null;
 }
 
 interface VideoInvitationProps {
-  template: Template
-  compact?: boolean
-  showPlayBadge?: boolean
-  data?: InvitationText
-  className?: string
+  template: Template;
+  compact?: boolean;
+  showPlayBadge?: boolean;
+  data?: InvitationText;
+  className?: string;
 }
 
 const religionOverlays = {
   hindu: "from-rose-950/45 via-transparent to-amber-950/65",
   muslim: "from-emerald-950/50 via-transparent to-emerald-950/70",
-  christian: "from-slate-950/40 via-transparent to-amber-950/55",
-}
+  christian: "from-slate-950/65 via-slate-950/35 to-amber-950/80",
+};
+
+const nameTextClasses: Record<Template["religion"], string> = {
+  hindu: "text-white",
+  muslim: "text-white",
+  christian: "text-amber-100",
+};
+
+const accentTextClasses: Record<Template["religion"], string> = {
+  hindu: "text-amber-300/90",
+  muslim: "text-amber-300/90",
+  christian: "text-amber-100",
+};
+
+const metaTextClasses: Record<Template["religion"], string> = {
+  hindu: "text-white/85",
+  muslim: "text-white/85",
+  christian: "text-amber-100/80",
+};
+
+const venueTextClasses: Record<Template["religion"], string> = {
+  hindu: "text-white/70",
+  muslim: "text-white/70",
+  christian: "text-amber-100/70",
+};
 
 const defaultNames: Record<Template["religion"], InvitationText> = {
   hindu: {
@@ -55,7 +80,7 @@ const defaultNames: Record<Template["religion"], InvitationText> = {
     time: "Church ceremony",
     venue: "St. Mary's Church",
   },
-}
+};
 
 export function VideoInvitation({
   template,
@@ -64,11 +89,19 @@ export function VideoInvitation({
   data,
   className = "",
 }: VideoInvitationProps) {
-  const videoConfig = getTemplateVideo(template.id)
-  if (!videoConfig) return null
+  const videoConfig = getTemplateVideo(template.id);
+  if (!videoConfig) return null;
 
-  const displayData = data ?? defaultNames[template.religion]
-  const petalColor = template.religion === "hindu" ? "pink" : "gold"
+  const displayData = data ?? defaultNames[template.religion];
+  const petalColor = template.religion === "hindu" ? "pink" : "gold";
+  const textColorClass = nameTextClasses[template.religion];
+  const accentColorClass = accentTextClasses[template.religion];
+  const metaColorClass = metaTextClasses[template.religion];
+  const venueColorClass = venueTextClasses[template.religion];
+  const nameTextShadow =
+    template.religion === "christian"
+      ? { textShadow: "0 0 20px rgba(255, 209, 102, 0.35)" }
+      : undefined;
 
   return (
     <motion.div
@@ -104,7 +137,7 @@ export function VideoInvitation({
       )}
 
       <motion.div
-        className="absolute inset-x-0 bottom-0 z-10 flex flex-col items-center px-4 pb-5 pt-16 text-center"
+        className="absolute inset-0 z-10 flex flex-col items-center justify-center px-4 py-8 text-center"
         initial={{ y: 20, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ delay: 0.3, duration: 0.6 }}
@@ -118,24 +151,45 @@ export function VideoInvitation({
         </motion.p>
 
         <motion.h3
-          className={`font-bold text-white drop-shadow-lg ${compact ? "text-lg leading-tight" : "text-2xl md:text-3xl"}`}
+          style={nameTextShadow}
+          className={`font-bold ${textColorClass} ${compact ? "text-lg leading-tight" : "text-2xl md:text-3xl"}`}
         >
           {displayData.brideName}
         </motion.h3>
 
-        <span className="my-0.5 text-sm text-amber-300/90">&</span>
+        <span className={`my-0.5 text-sm ${accentColorClass}`}>&</span>
 
         <motion.h3
-          className={`font-bold text-white drop-shadow-lg ${compact ? "text-lg leading-tight" : "text-2xl md:text-3xl"}`}
+          style={nameTextShadow}
+          className={`font-bold ${textColorClass} ${compact ? "text-lg leading-tight" : "text-2xl md:text-3xl"}`}
         >
           {displayData.groomName}
         </motion.h3>
 
+        {displayData.couplePhoto && (
+          <motion.div
+            className="mt-4 w-24 h-24 md:w-32 md:h-32 rounded-full overflow-hidden border-4 border-amber-300/60 shadow-2xl"
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ delay: 0.5, duration: 0.6 }}
+          >
+            <img
+              src={displayData.couplePhoto}
+              alt={`${displayData.brideName} & ${displayData.groomName}`}
+              className="w-full h-full object-cover"
+            />
+          </motion.div>
+        )}
+
         {!compact && (
-          <div className="mt-3 space-y-0.5 text-xs text-white/85">
-            {displayData.date && <p className="font-medium">{displayData.date}</p>}
+          <div className={`mt-3 space-y-0.5 text-xs ${metaColorClass}`}>
+            {displayData.date && (
+              <p className="font-medium">{displayData.date}</p>
+            )}
             {displayData.time && <p>{displayData.time}</p>}
-            {displayData.venue && <p className="text-white/70">{displayData.venue}</p>}
+            {displayData.venue && (
+              <p className={venueColorClass}>{displayData.venue}</p>
+            )}
           </div>
         )}
 
@@ -148,9 +202,15 @@ export function VideoInvitation({
 
       <motion.div
         className="pointer-events-none absolute inset-2 rounded-md border border-amber-300/40"
-        animate={{ borderColor: ["rgba(252, 211, 77, 0.3)", "rgba(252, 211, 77, 0.6)", "rgba(252, 211, 77, 0.3)"] }}
+        animate={{
+          borderColor: [
+            "rgba(252, 211, 77, 0.3)",
+            "rgba(252, 211, 77, 0.6)",
+            "rgba(252, 211, 77, 0.3)",
+          ],
+        }}
         transition={{ duration: 4, repeat: Infinity }}
       />
     </motion.div>
-  )
+  );
 }

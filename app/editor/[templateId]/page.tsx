@@ -1,62 +1,79 @@
-"use client"
+"use client";
 
-import { useState, useRef, useCallback } from "react"
-import { motion } from "framer-motion"
-import { useParams, useRouter } from "next/navigation"
-import Link from "next/link"
-import { templates } from "@/components/featured-templates"
+import { useState, useRef, useCallback } from "react";
+import { motion } from "framer-motion";
+import { useParams, useRouter } from "next/navigation";
+import Link from "next/link";
+import { templates } from "@/components/featured-templates";
 import {
   buildInvitationFilename,
   captureInvitationElement,
   downloadCanvasAsPng,
-} from "@/lib/capture-invitation"
+} from "@/lib/capture-invitation";
 import {
   downloadVideoBlob,
   recordInvitationVideo,
-} from "@/lib/record-invitation-video"
-import { toast } from "sonner"
-import { Toaster } from "sonner"
-import { VideoInvitation } from "@/components/video-invitation"
-import { ScrollStoryInvitation } from "@/components/scroll-story/scroll-story-invitation"
-import { getTemplateVideo, supportsVideoDownload } from "@/lib/template-videos"
-import { saveInvitationData, toScrollStoryData } from "@/lib/invitation-storage"
-import { ArrowLeft, Download, Share2, Eye, Edit3, Type, Calendar, MapPin, Image as ImageIcon, Palette, Heart, ExternalLink, ShoppingCart } from "lucide-react"
+} from "@/lib/record-invitation-video";
+import { toast } from "sonner";
+import { Toaster } from "sonner";
+import { VideoInvitation } from "@/components/video-invitation";
+import { ScrollStoryInvitation } from "@/components/scroll-story/scroll-story-invitation";
+import { getTemplateVideo, supportsVideoDownload } from "@/lib/template-videos";
+import {
+  saveInvitationData,
+  toScrollStoryData,
+} from "@/lib/invitation-storage";
+import {
+  ArrowLeft,
+  Download,
+  Share2,
+  Eye,
+  Edit3,
+  Type,
+  Calendar,
+  MapPin,
+  Image as ImageIcon,
+  Palette,
+  Heart,
+  ExternalLink,
+  ShoppingCart,
+} from "lucide-react";
 
 interface InvitationData {
-  brideName: string
-  groomName: string
-  brideParents: string
-  groomParents: string
-  date: string
-  time: string
-  venue: string
-  venueAddress: string
-  message: string
-  couplePhoto: string | null
-  fontStyle: string
+  brideName: string;
+  groomName: string;
+  brideParents: string;
+  groomParents: string;
+  date: string;
+  time: string;
+  venue: string;
+  venueAddress: string;
+  message: string;
+  couplePhoto: string | null;
+  fontStyle: string;
 }
 
 const fontOptions = [
   { value: "font-serif", label: "Elegant Serif" },
   { value: "font-sans", label: "Modern Sans" },
   { value: "font-mono", label: "Classic Mono" },
-]
+];
 
 export default function EditorPage() {
-  const params = useParams()
-  const router = useRouter()
-  const templateId = params.templateId as string
-  const template = templates.find(t => t.id === templateId)
-  const previewRef = useRef<HTMLDivElement>(null)
-  
-  const [isPreviewMode, setIsPreviewMode] = useState(false)
-  const [isDownloading, setIsDownloading] = useState(false)
+  const params = useParams();
+  const router = useRouter();
+  const templateId = params.templateId as string;
+  const template = templates.find((t) => t.id === templateId);
+  const previewRef = useRef<HTMLDivElement>(null);
+
+  const [isPreviewMode, setIsPreviewMode] = useState(false);
+  const [isDownloading, setIsDownloading] = useState(false);
 
   const isVideoTemplate =
-    template?.type === "animated" && Boolean(getTemplateVideo(templateId))
-  const isStoryTemplate = template?.type === "story"
-  const canDownloadVideo = supportsVideoDownload(templateId)
-  
+    template?.type === "animated" && Boolean(getTemplateVideo(templateId));
+  const isStoryTemplate = template?.type === "story";
+  const canDownloadVideo = supportsVideoDownload(templateId);
+
   const [data, setData] = useState<InvitationData>({
     brideName: "Priya",
     groomName: "Arjun",
@@ -66,76 +83,83 @@ export default function EditorPage() {
     time: "10:30 AM",
     venue: "Guruvayur Temple",
     venueAddress: "Guruvayur, Thrissur, Kerala",
-    message: "Together with our families, we invite you to celebrate our wedding",
+    message:
+      "Together with our families, we invite you to celebrate our wedding",
     couplePhoto: null,
     fontStyle: "font-serif",
-  })
+  });
 
   const updateField = (field: keyof InvitationData, value: string) => {
-    setData(prev => ({ ...prev, [field]: value }))
-  }
+    setData((prev) => ({ ...prev, [field]: value }));
+  };
 
   const handlePhotoUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0]
+    const file = e.target.files?.[0];
     if (file) {
-      const reader = new FileReader()
+      const reader = new FileReader();
       reader.onloadend = () => {
-        setData(prev => ({ ...prev, couplePhoto: reader.result as string }))
-      }
-      reader.readAsDataURL(file)
+        setData((prev) => ({ ...prev, couplePhoto: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
     }
-  }
+  };
 
   const runDownload = useCallback(async () => {
     if (!previewRef.current) {
-      toast.error("Preview not ready")
-      return
+      toast.error("Preview not ready");
+      return;
     }
 
-    setIsDownloading(true)
+    setIsDownloading(true);
 
     try {
       if (canDownloadVideo) {
         toast.message(
           isStoryTemplate ? "Recording cinematic clip…" : "Recording video…",
-          { duration: 3000 }
-        )
+          { duration: 3000 },
+        );
         const { blob, extension } = await recordInvitationVideo(
           previewRef.current,
-          templateId
-        )
+          templateId,
+        );
         const filename = buildInvitationFilename(
           data.brideName,
           data.groomName,
-          extension
-        )
-        downloadVideoBlob(blob, filename)
-        toast.success(`Downloaded video (.${extension})`)
+          extension,
+        );
+        downloadVideoBlob(blob, filename);
+        toast.success(`Downloaded video (.${extension})`);
       } else {
-        const canvas = await captureInvitationElement(previewRef.current)
+        const canvas = await captureInvitationElement(previewRef.current);
         const filename = buildInvitationFilename(
           data.brideName,
           data.groomName,
-          "png"
-        )
-        downloadCanvasAsPng(canvas, filename)
-        toast.success("Downloaded PNG")
+          "png",
+        );
+        downloadCanvasAsPng(canvas, filename);
+        toast.success("Downloaded PNG");
       }
     } catch (error) {
       const message =
-        error instanceof Error ? error.message : "Download failed"
-      console.error("Download error:", error)
-      toast.error(message)
+        error instanceof Error ? error.message : "Download failed";
+      console.error("Download error:", error);
+      toast.error(message);
     } finally {
-      setIsDownloading(false)
+      setIsDownloading(false);
     }
-  }, [data.brideName, data.groomName, canDownloadVideo, isStoryTemplate, templateId])
+  }, [
+    data.brideName,
+    data.groomName,
+    canDownloadVideo,
+    isStoryTemplate,
+    templateId,
+  ]);
 
   const openFullPreview = () => {
     if (isStoryTemplate) {
-      saveInvitationData(templateId, toScrollStoryData(data))
+      saveInvitationData(templateId, toScrollStoryData(data));
     }
-  }
+  };
 
   const shareInvitation = async () => {
     const url =
@@ -143,31 +167,33 @@ export default function EditorPage() {
         ? isStoryTemplate
           ? `${window.location.origin}/invitation/${templateId}`
           : window.location.href
-        : ""
-    const text = `${data.brideName} & ${data.groomName} — Wedding Invitation`
+        : "";
+    const text = `${data.brideName} & ${data.groomName} — Wedding Invitation`;
     if (navigator.share) {
       try {
-        await navigator.share({ title: text, text: data.message, url })
-        return
+        await navigator.share({ title: text, text: data.message, url });
+        return;
       } catch {
         /* fall through */
       }
     }
-    await navigator.clipboard.writeText(url)
-    toast.success("Link copied to clipboard")
-  }
+    await navigator.clipboard.writeText(url);
+    toast.success("Link copied to clipboard");
+  };
 
   if (!template) {
     return (
       <div className="min-h-screen bg-kerala-ivory flex items-center justify-center">
         <div className="text-center">
-          <h1 className="text-2xl font-bold text-kerala-dark mb-4">Template not found</h1>
+          <h1 className="text-2xl font-bold text-kerala-dark mb-4">
+            Template not found
+          </h1>
           <Link href="/templates" className="text-kerala-green hover:underline">
             Browse templates
           </Link>
         </div>
       </div>
-    )
+    );
   }
 
   return (
@@ -185,23 +211,27 @@ export default function EditorPage() {
             </button>
             <div>
               <h1 className="font-bold text-lg">{template.name}</h1>
-              <p className="text-sm text-kerala-ivory/60">Editing your invitation</p>
+              <p className="text-sm text-kerala-ivory/60">
+                Editing your invitation
+              </p>
             </div>
           </div>
-          
+
           <div className="flex items-center gap-3">
             <button
               onClick={() => setIsPreviewMode(!isPreviewMode)}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg transition-colors ${
-                isPreviewMode 
-                  ? "bg-kerala-gold text-kerala-dark" 
+                isPreviewMode
+                  ? "bg-kerala-gold text-kerala-dark"
                   : "bg-kerala-green/20 hover:bg-kerala-green/30"
               }`}
             >
               {isPreviewMode ? <Edit3 size={18} /> : <Eye size={18} />}
-              <span className="hidden sm:inline">{isPreviewMode ? "Edit" : "Preview"}</span>
+              <span className="hidden sm:inline">
+                {isPreviewMode ? "Edit" : "Preview"}
+              </span>
             </button>
-            
+
             {isStoryTemplate && (
               <Link
                 href={`/invitation/${templateId}`}
@@ -276,7 +306,7 @@ export default function EditorPage() {
                   Edit Your Invitation
                 </h2>
               </div>
-              
+
               <div className="p-6 space-y-6 max-h-[calc(100vh-300px)] overflow-y-auto">
                 {/* Names Section */}
                 <div className="space-y-4">
@@ -286,21 +316,29 @@ export default function EditorPage() {
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm text-kerala-dark/60 mb-1">Bride&apos;s Name</label>
+                      <label className="block text-sm text-kerala-dark/60 mb-1">
+                        Bride&apos;s Name
+                      </label>
                       <input
                         type="text"
                         value={data.brideName}
-                        onChange={(e) => updateField("brideName", e.target.value)}
+                        onChange={(e) =>
+                          updateField("brideName", e.target.value)
+                        }
                         className="w-full px-4 py-3 border border-kerala-gold/20 rounded-lg focus:ring-2 focus:ring-kerala-green focus:border-transparent transition-all"
                         placeholder="Bride's name"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-kerala-dark/60 mb-1">Groom&apos;s Name</label>
+                      <label className="block text-sm text-kerala-dark/60 mb-1">
+                        Groom&apos;s Name
+                      </label>
                       <input
                         type="text"
                         value={data.groomName}
-                        onChange={(e) => updateField("groomName", e.target.value)}
+                        onChange={(e) =>
+                          updateField("groomName", e.target.value)
+                        }
                         className="w-full px-4 py-3 border border-kerala-gold/20 rounded-lg focus:ring-2 focus:ring-kerala-green focus:border-transparent transition-all"
                         placeholder="Groom's name"
                       />
@@ -310,24 +348,34 @@ export default function EditorPage() {
 
                 {/* Parents Section */}
                 <div className="space-y-4">
-                  <h3 className="font-semibold text-kerala-dark">Parents&apos; Names</h3>
+                  <h3 className="font-semibold text-kerala-dark">
+                    Parents&apos; Names
+                  </h3>
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-sm text-kerala-dark/60 mb-1">Bride&apos;s Parents</label>
+                      <label className="block text-sm text-kerala-dark/60 mb-1">
+                        Bride&apos;s Parents
+                      </label>
                       <input
                         type="text"
                         value={data.brideParents}
-                        onChange={(e) => updateField("brideParents", e.target.value)}
+                        onChange={(e) =>
+                          updateField("brideParents", e.target.value)
+                        }
                         className="w-full px-4 py-3 border border-kerala-gold/20 rounded-lg focus:ring-2 focus:ring-kerala-green focus:border-transparent transition-all"
                         placeholder="Bride's parents"
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-kerala-dark/60 mb-1">Groom&apos;s Parents</label>
+                      <label className="block text-sm text-kerala-dark/60 mb-1">
+                        Groom&apos;s Parents
+                      </label>
                       <input
                         type="text"
                         value={data.groomParents}
-                        onChange={(e) => updateField("groomParents", e.target.value)}
+                        onChange={(e) =>
+                          updateField("groomParents", e.target.value)
+                        }
                         className="w-full px-4 py-3 border border-kerala-gold/20 rounded-lg focus:ring-2 focus:ring-kerala-green focus:border-transparent transition-all"
                         placeholder="Groom's parents"
                       />
@@ -343,7 +391,9 @@ export default function EditorPage() {
                   </h3>
                   <div className="grid grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm text-kerala-dark/60 mb-1">Wedding Date</label>
+                      <label className="block text-sm text-kerala-dark/60 mb-1">
+                        Wedding Date
+                      </label>
                       <input
                         type="date"
                         value={data.date}
@@ -352,7 +402,9 @@ export default function EditorPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-kerala-dark/60 mb-1">Time</label>
+                      <label className="block text-sm text-kerala-dark/60 mb-1">
+                        Time
+                      </label>
                       <input
                         type="text"
                         value={data.time}
@@ -372,7 +424,9 @@ export default function EditorPage() {
                   </h3>
                   <div className="space-y-3">
                     <div>
-                      <label className="block text-sm text-kerala-dark/60 mb-1">Venue Name</label>
+                      <label className="block text-sm text-kerala-dark/60 mb-1">
+                        Venue Name
+                      </label>
                       <input
                         type="text"
                         value={data.venue}
@@ -382,11 +436,15 @@ export default function EditorPage() {
                       />
                     </div>
                     <div>
-                      <label className="block text-sm text-kerala-dark/60 mb-1">Address</label>
+                      <label className="block text-sm text-kerala-dark/60 mb-1">
+                        Address
+                      </label>
                       <input
                         type="text"
                         value={data.venueAddress}
-                        onChange={(e) => updateField("venueAddress", e.target.value)}
+                        onChange={(e) =>
+                          updateField("venueAddress", e.target.value)
+                        }
                         className="w-full px-4 py-3 border border-kerala-gold/20 rounded-lg focus:ring-2 focus:ring-kerala-green focus:border-transparent transition-all"
                         placeholder="Full address"
                       />
@@ -396,7 +454,9 @@ export default function EditorPage() {
 
                 {/* Message Section */}
                 <div className="space-y-4">
-                  <h3 className="font-semibold text-kerala-dark">Invitation Message</h3>
+                  <h3 className="font-semibold text-kerala-dark">
+                    Invitation Message
+                  </h3>
                   <textarea
                     value={data.message}
                     onChange={(e) => updateField("message", e.target.value)}
@@ -421,7 +481,9 @@ export default function EditorPage() {
                           className="w-24 h-24 object-cover rounded-full mx-auto"
                         />
                         <button
-                          onClick={() => setData(prev => ({ ...prev, couplePhoto: null }))}
+                          onClick={() =>
+                            setData((prev) => ({ ...prev, couplePhoto: null }))
+                          }
                           className="text-sm text-red-600 hover:underline"
                         >
                           Remove photo
@@ -483,7 +545,7 @@ export default function EditorPage() {
                   Live Preview
                 </h2>
               </div>
-              
+
               <div className="p-6">
                 <div
                   ref={previewRef}
@@ -504,26 +566,26 @@ export default function EditorPage() {
         </div>
       </div>
     </motion.div>
-  )
+  );
 }
 
-function InvitationPreview({ 
-  template, 
-  data 
-}: { 
-  template: typeof templates[0]
-  data: InvitationData 
+function InvitationPreview({
+  template,
+  data,
+}: {
+  template: (typeof templates)[0];
+  data: InvitationData;
 }) {
   const formatDate = (dateStr: string) => {
-    if (!dateStr) return "Date"
-    const date = new Date(dateStr)
+    if (!dateStr) return "Date";
+    const date = new Date(dateStr);
     return date.toLocaleDateString("en-US", {
       weekday: "long",
       year: "numeric",
       month: "long",
       day: "numeric",
-    })
-  }
+    });
+  };
 
   if (template.type === "animated" && getTemplateVideo(template.id)) {
     return (
@@ -537,9 +599,10 @@ function InvitationPreview({
           date: formatDate(data.date),
           time: `at ${data.time}`,
           venue: `${data.venue}, ${data.venueAddress}`,
+          couplePhoto: data.couplePhoto,
         }}
       />
-    )
+    );
   }
 
   if (template.type === "story") {
@@ -550,20 +613,20 @@ function InvitationPreview({
         compact
         className={`h-full w-full ${data.fontStyle}`}
       />
-    )
+    );
   }
 
   const bgGradients = {
     hindu: "from-orange-50 via-red-50 to-yellow-50",
     muslim: "from-emerald-50 via-teal-50 to-green-50",
     christian: "from-blue-50 via-indigo-50 to-white",
-  }
+  };
 
   const accentColors = {
     hindu: "text-orange-700",
     muslim: "text-emerald-700",
     christian: "text-blue-700",
-  }
+  };
 
   return (
     <div
@@ -585,23 +648,35 @@ function InvitationPreview({
         </div>
 
         {/* Invitation Text */}
-        <p className="text-kerala-gold text-xs tracking-[0.2em] uppercase mb-2">Wedding Invitation</p>
-        
-        <p className="text-kerala-dark/60 text-sm mb-4 max-w-xs">{data.message}</p>
+        <p className="text-kerala-gold text-xs tracking-[0.2em] uppercase mb-2">
+          Wedding Invitation
+        </p>
+
+        <p className="text-kerala-dark/60 text-sm mb-4 max-w-xs">
+          {data.message}
+        </p>
 
         {/* Couple Photo */}
         {data.couplePhoto && (
           <div className="w-20 h-20 rounded-full overflow-hidden border-4 border-kerala-gold/30 mb-4">
-            <img src={data.couplePhoto} alt="Couple" className="w-full h-full object-cover" />
+            <img
+              src={data.couplePhoto}
+              alt="Couple"
+              className="w-full h-full object-cover"
+            />
           </div>
         )}
 
         {/* Names */}
-        <h2 className={`text-3xl font-bold ${accentColors[template.religion]} mb-1`}>
+        <h2
+          className={`text-3xl font-bold ${accentColors[template.religion]} mb-1`}
+        >
           {data.brideName}
         </h2>
         <p className="text-kerala-gold text-lg mb-1">&</p>
-        <h2 className={`text-3xl font-bold ${accentColors[template.religion]} mb-4`}>
+        <h2
+          className={`text-3xl font-bold ${accentColors[template.religion]} mb-4`}
+        >
           {data.groomName}
         </h2>
 
@@ -615,7 +690,9 @@ function InvitationPreview({
         <div className="w-16 h-px bg-kerala-gold/40 mb-4" />
 
         {/* Date & Time */}
-        <p className="text-sm font-semibold text-kerala-dark mb-1">{formatDate(data.date)}</p>
+        <p className="text-sm font-semibold text-kerala-dark mb-1">
+          {formatDate(data.date)}
+        </p>
         <p className="text-sm text-kerala-dark/60 mb-4">at {data.time}</p>
 
         {/* Venue */}
@@ -625,30 +702,42 @@ function InvitationPreview({
         {/* Bottom Decoration */}
         <div className="mt-6">
           <svg viewBox="0 0 100 20" className="w-24 h-4 text-kerala-gold/40">
-            <path fill="currentColor" d="M0 10 Q25 0 50 10 Q75 20 100 10 L100 20 L0 20 Z" />
+            <path
+              fill="currentColor"
+              d="M0 10 Q25 0 50 10 Q75 20 100 10 L100 20 L0 20 Z"
+            />
           </svg>
         </div>
       </div>
     </div>
-  )
+  );
 }
 
 function HinduDecorSmall() {
   return (
     <svg viewBox="0 0 60 60" className="w-12 h-12">
-      <path fill="#d4af37" d="M30 5L35 18H48L38 27L42 40L30 32L18 40L22 27L12 18H25L30 5Z" />
+      <path
+        fill="#d4af37"
+        d="M30 5L35 18H48L38 27L42 40L30 32L18 40L22 27L12 18H25L30 5Z"
+      />
       <circle cx="30" cy="28" r="6" fill="#c41e3a" />
     </svg>
-  )
+  );
 }
 
 function MuslimDecorSmall() {
   return (
     <svg viewBox="0 0 60 60" className="w-12 h-12">
-      <path fill="#065f46" d="M30 5C22 15 18 25 18 35C18 50 24 55 30 58C36 55 42 50 42 35C42 25 38 15 30 5Z" />
-      <path fill="#d4af37" d="M30 18L32 24L38 24L33 28L35 34L30 30L25 34L27 28L22 24L28 24L30 18Z" />
+      <path
+        fill="#065f46"
+        d="M30 5C22 15 18 25 18 35C18 50 24 55 30 58C36 55 42 50 42 35C42 25 38 15 30 5Z"
+      />
+      <path
+        fill="#d4af37"
+        d="M30 18L32 24L38 24L33 28L35 34L30 30L25 34L27 28L22 24L28 24L30 18Z"
+      />
     </svg>
-  )
+  );
 }
 
 function ChristianDecorSmall() {
@@ -657,5 +746,5 @@ function ChristianDecorSmall() {
       <rect x="27" y="10" width="6" height="40" fill="#d4af37" />
       <rect x="18" y="20" width="24" height="6" fill="#d4af37" />
     </svg>
-  )
+  );
 }

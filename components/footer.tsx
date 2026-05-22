@@ -19,7 +19,7 @@ const footerLinks = {
   ],
   support: [
     { label: "How It Works", href: "/how-it-works" },
-    { label: "FAQs", href: "/faqs" },
+    { label: "FAQs", href: "/faq" },
     { label: "Help Center", href: "/help" },
   ],
 };

@@ -1,19 +1,19 @@
-"use client"
+"use client";
 
-import { motion } from "framer-motion"
-import Link from "next/link"
-import { TemplateCoverflowCarousel } from "@/components/template-coverflow-carousel"
-import { TemplatePreview } from "@/components/template-preview"
+import { motion } from "framer-motion";
+import Link from "next/link";
+import { TemplateCoverflowCarousel } from "@/components/template-coverflow-carousel";
+import { TemplatePreview } from "@/components/template-preview";
 
 export interface Template {
-  id: string
-  name: string
-  religion: "hindu" | "muslim" | "christian"
-  style: string
-  preview: string
-  colors: string[]
-  type?: "static" | "animated" | "story"
-  thumbnail?: string
+  id: string;
+  name: string;
+  religion: "hindu" | "muslim" | "christian";
+  style: string;
+  preview: string;
+  colors: string[];
+  type?: "static" | "animated" | "story";
+  thumbnail?: string;
 }
 
 export const templates: Template[] = [
@@ -25,22 +25,6 @@ export const templates: Template[] = [
     style: "Traditional",
     preview: "hindu-temple",
     colors: ["#d4af37", "#8B0000", "#FFF8DC"],
-  },
-  {
-    id: "hindu-royal",
-    name: "Royal Kerala Hindu",
-    religion: "hindu",
-    style: "Royal",
-    preview: "hindu-royal",
-    colors: ["#d4af37", "#1a3a2a", "#FFF8DC"],
-  },
-  {
-    id: "hindu-minimal",
-    name: "Minimal Elegant Hindu",
-    religion: "hindu",
-    style: "Minimal",
-    preview: "hindu-minimal",
-    colors: ["#d4af37", "#f5f5dc", "#1a3a2a"],
   },
   {
     id: "hindu-radha-krishna",
@@ -73,22 +57,6 @@ export const templates: Template[] = [
     colors: ["#fbcfe8", "#16a34a", "#fef9c3"],
   },
   // Muslim Templates
-  {
-    id: "muslim-malabar",
-    name: "Malabar Nikah Invitation",
-    religion: "muslim",
-    style: "Traditional",
-    preview: "muslim-malabar",
-    colors: ["#065f46", "#d4af37", "#f0fdf4"],
-  },
-  {
-    id: "muslim-golden",
-    name: "Golden Islamic Elegance",
-    religion: "muslim",
-    style: "Luxury",
-    preview: "muslim-golden",
-    colors: ["#d4af37", "#065f46", "#fef3c7"],
-  },
   {
     id: "muslim-minimal",
     name: "Minimal Green Muslim",
@@ -128,22 +96,6 @@ export const templates: Template[] = [
     colors: ["#064e3b", "#d4af37", "#ecfdf5"],
   },
   // Christian Templates
-  {
-    id: "christian-syrian",
-    name: "Syrian Christian Heritage",
-    religion: "christian",
-    style: "Traditional",
-    preview: "christian-syrian",
-    colors: ["#d4af37", "#1e3a5f", "#ffffff"],
-  },
-  {
-    id: "christian-church",
-    name: "White & Gold Church",
-    religion: "christian",
-    style: "Elegant",
-    preview: "christian-church",
-    colors: ["#ffffff", "#d4af37", "#1a1a1a"],
-  },
   {
     id: "christian-floral",
     name: "Floral Christian Elegance",
@@ -190,7 +142,7 @@ export const templates: Template[] = [
     type: "story",
     colors: ["#1e3a5f", "#d4af37", "#f8fafc"],
   },
-]
+];
 
 export function FeaturedTemplates() {
   return (
@@ -210,11 +162,20 @@ export function FeaturedTemplates() {
             Hindu, Muslim & <span className="text-kerala-green">Christian</span>
           </h2>
           <p className="text-xl text-kerala-dark/60 max-w-2xl mx-auto">
-            Browse every template — {templates.length} designs across all Kerala wedding traditions
+            Browse every template — {templates.length} designs across all Kerala
+            wedding traditions
           </p>
         </motion.div>
 
-        <TemplateCoverflowCarousel items={templates} />
+        <motion.div
+          initial={{ opacity: 0, y: 24 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.7, delay: 0.15 }}
+          className="overflow-hidden rounded-3xl"
+        >
+          <TemplateCoverflowCarousel items={templates} />
+        </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -228,28 +189,44 @@ export function FeaturedTemplates() {
             className="inline-flex items-center px-8 py-4 bg-kerala-green text-kerala-ivory rounded-full font-semibold text-lg hover:bg-kerala-dark transition-all duration-300"
           >
             View All Templates
-            <svg className="w-5 h-5 ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            <svg
+              className="w-5 h-5 ml-2"
+              fill="none"
+              stroke="currentColor"
+              viewBox="0 0 24 24"
+            >
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M17 8l4 4m0 0l-4 4m4-4H3"
+              />
             </svg>
           </Link>
         </motion.div>
       </div>
     </section>
-  )
+  );
 }
 
-export function TemplateCard({ template, index }: { template: Template; index: number }) {
+export function TemplateCard({
+  template,
+  index,
+}: {
+  template: Template;
+  index: number;
+}) {
   const religionLabels = {
     hindu: "Hindu",
     muslim: "Muslim",
     christian: "Christian",
-  }
+  };
 
   const religionColors = {
     hindu: "bg-orange-100 text-orange-800",
     muslim: "bg-emerald-100 text-emerald-800",
     christian: "bg-blue-100 text-blue-800",
-  }
+  };
 
   return (
     <motion.div
@@ -269,11 +246,13 @@ export function TemplateCard({ template, index }: { template: Template; index: n
               </span>
             </div>
           </div>
-          
+
           {/* Template Info */}
           <div className="p-5">
             <motion.div className="flex items-center justify-between mb-2 flex-wrap gap-1">
-              <span className={`px-3 py-1 rounded-full text-xs font-medium ${religionColors[template.religion]}`}>
+              <span
+                className={`px-3 py-1 rounded-full text-xs font-medium ${religionColors[template.religion]}`}
+              >
                 {religionLabels[template.religion]}
               </span>
               {template.type === "animated" && (
@@ -286,9 +265,13 @@ export function TemplateCard({ template, index }: { template: Template; index: n
                   Cinematic
                 </span>
               )}
-              <span className="text-sm text-kerala-dark/50 ml-auto">{template.style}</span>
+              <span className="text-sm text-kerala-dark/50 ml-auto">
+                {template.style}
+              </span>
             </motion.div>
-            <h3 className="text-lg font-bold text-kerala-dark">{template.name}</h3>
+            <h3 className="text-lg font-bold text-kerala-dark">
+              {template.name}
+            </h3>
             <div className="flex gap-2 mt-3">
               {template.colors.map((color, i) => (
                 <div
@@ -302,6 +285,5 @@ export function TemplateCard({ template, index }: { template: Template; index: n
         </div>
       </Link>
     </motion.div>
-  )
+  );
 }
-
