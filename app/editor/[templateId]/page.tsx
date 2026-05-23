@@ -161,26 +161,90 @@ export default function EditorPage() {
     }
   };
 
+  const copyTextToClipboard = async (text: string) => {
+    if (navigator.clipboard?.writeText) {
+      return navigator.clipboard.writeText(text);
+    }
+
+    if (typeof document !== "undefined") {
+      const textarea = document.createElement("textarea");
+      textarea.value = text;
+      textarea.setAttribute("readonly", "");
+      textarea.style.position = "absolute";
+      textarea.style.left = "-9999px";
+      document.body.appendChild(textarea);
+      textarea.focus();
+      textarea.select();
+      textarea.setSelectionRange(0, text.length);
+
+      const successful = document.execCommand("copy");
+      document.body.removeChild(textarea);
+
+      if (!successful) {
+        throw new Error("Copy command failed");
+      }
+    }
+  };
+
   const shareInvitation = async () => {
+    console.log("Sharing invitation with data:", data);
+
     const url =
       typeof window !== "undefined"
         ? isStoryTemplate
           ? `${window.location.origin}/invitation/${templateId}`
           : window.location.href
         : "";
-    const text = `${data.brideName} & ${data.groomName} — Wedding Invitation`;
-    if (navigator.share) {
-      try {
-        await navigator.share({ title: text, text: data.message, url });
-        return;
-      } catch {
-        /* fall through */
-      }
-    }
-    await navigator.clipboard.writeText(url);
-    toast.success("Link copied to clipboard");
-  };
 
+    const text = `${data.brideName} & ${data.groomName} — Wedding Invitation`;
+    const fullMessage = `${data.message}\n\n${url}`;
+
+    try {
+      // First try: Web Share API (mobile + some desktop)
+      if (
+        navigator.share &&
+        /Android|iPhone|iPad|iPod/.test(navigator.userAgent)
+      ) {
+        await navigator.share({
+          title: text,
+          text: data.message,
+          url,
+        });
+        toast.success("Invitation shared!");
+        return;
+      }
+
+      // Second try: Copy to clipboard (works on all Windows/Mac/Linux)
+      if (navigator.clipboard) {
+        await navigator.clipboard.writeText(url);
+        toast.success("Link copied to clipboard!");
+        return;
+      }
+
+      // Fallback: Old clipboard API
+      const textarea = document.createElement("textarea");
+      textarea.value = url;
+      document.body.appendChild(textarea);
+      textarea.select();
+      const success = document.execCommand("copy");
+      document.body.removeChild(textarea);
+
+      if (success) {
+        toast.success("Link copied to clipboard!");
+      } else {
+        throw new Error("Copy command failed");
+      }
+    } catch (error) {
+      console.error("Share failed:", error);
+
+      // Last resort: Show modal or fallback UI
+      toast.error("Could not copy automatically");
+
+      // Option A: Show the URL in a modal for manual copy
+      // Option B: Open a share modal with preset social links
+      // Create this component
+    }
+  };
   if (!template) {
     return (
       <div className="min-h-screen bg-kerala-ivory flex items-center justify-center">

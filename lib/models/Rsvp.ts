@@ -1,4 +1,4 @@
-const mongoose = require("mongoose")
+import mongoose from "mongoose";
 
 const rsvpSchema = new mongoose.Schema(
   {
@@ -24,9 +24,11 @@ const rsvpSchema = new mongoose.Schema(
     message: { type: String, default: "", maxlength: 1000 },
     invitationId: { type: String, default: "default" },
   },
-  { timestamps: true }
-)
+  { timestamps: true },
+);
 
-rsvpSchema.index({ email: 1, phone: 1, invitationId: 1 }, { unique: true })
+rsvpSchema.index({ email: 1, phone: 1, invitationId: 1 }, { unique: true });
 
-module.exports = mongoose.models.Rsvp || mongoose.model("Rsvp", rsvpSchema)
+const Rsvp = mongoose.models.Rsvp || mongoose.model("Rsvp", rsvpSchema);
+
+export default Rsvp;
