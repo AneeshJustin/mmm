@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import XLSX from "xlsx";
+import * as XLSX from "xlsx";
 import dbConnect from "@/lib/db";
 import Rsvp from "@/lib/models/Rsvp";
 import { requireAdmin } from "@/lib/auth";
