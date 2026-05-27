@@ -5,13 +5,6 @@ import Link from "next/link"
 import { motion, AnimatePresence } from "framer-motion"
 import { X } from "lucide-react"
 
-const navCategories = [
-  { href: "/hindu", label: "Hindu" },
-  { href: "/muslim", label: "Muslim" },
-  { href: "/christian", label: "Christian" },
-  { href: "/trending", label: "Trending" },
-]
-
 const allNavLinks = [
   { href: "/", label: "Home" },
   { href: "/hindu", label: "Hindu Invitations" },
@@ -46,20 +39,6 @@ export function Navbar() {
                 Kerala Vivah<sup className="text-[9px] font-medium ml-0.5 align-super text-gray-500">®</sup>
               </span>
             </Link>
-
-            {/* Center: Category Nav Links with dividers */}
-            <div className="hidden lg:flex items-center h-full divide-x divide-gray-200">
-              {navCategories.map((cat) => (
-                <Link
-                  key={cat.href}
-                  href={cat.href}
-                  className="px-7 h-full flex items-center text-[13px] text-gray-600 hover:text-black transition-all duration-300 font-sans font-medium relative group"
-                >
-                  {cat.label}
-                  <span className="absolute bottom-0 left-0 right-0 h-0.5 bg-black transform scale-x-0 group-hover:scale-x-100 transition-transform duration-300" />
-                </Link>
-              ))}
-            </div>
 
             {/* Right: CTA + Hamburger */}
             <div className="flex items-center gap-3">
