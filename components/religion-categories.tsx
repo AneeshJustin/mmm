@@ -71,8 +71,11 @@ const categories = [
 
 export function ReligionCategories() {
   return (
-    <section className="py-24 bg-kerala-ivory">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="py-24 bg-kerala-ivory relative overflow-hidden">
+      {/* Soft warm glow background */}
+      <div className="absolute inset-0 radial-glow-green opacity-40 pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -80,15 +83,14 @@ export function ReligionCategories() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="inline-block px-4 py-2 bg-kerala-green/10 text-kerala-green rounded-full text-sm font-medium tracking-widest uppercase mb-4">
-            Browse By Religion
+          <span className="inline-block px-4 py-2 bg-kerala-green/10 text-kerala-green rounded-full text-xs font-semibold tracking-[0.25em] uppercase mb-4">
+            Curated Collections
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-kerala-dark mb-4">
-            Choose Your <span className="text-kerala-green">Tradition</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-kerala-dark mb-4">
+            Choose Your <span className="text-kerala-green italic font-medium">Tradition</span>
           </h2>
-          <p className="text-xl text-kerala-dark/60 max-w-2xl mx-auto">
-            Each template is crafted to honor the unique customs and aesthetics
-            of Kerala&apos;s diverse wedding traditions
+          <p className="text-lg md:text-xl text-kerala-dark/65 max-w-2xl mx-auto font-sans font-light">
+            Each template is meticulously curated to honor the sacred rituals, traditional symbols, and distinct visual elegance of Kerala's diverse wedding heritage.
           </p>
         </motion.div>
 
@@ -98,28 +100,32 @@ export function ReligionCategories() {
               key={category.id}
               initial={{ opacity: 0, y: 30 }}
               whileInView={{ opacity: 1, y: 0 }}
-              whileHover={{ y: -8, scale: 1.02 }}
+              whileHover={{ y: -8 }}
               viewport={{ once: true }}
-              transition={{ duration: 0.6, delay: index * 0.2 }}
+              transition={{ duration: 0.5, delay: index * 0.15 }}
             >
               <Link href={category.href}>
                 <div
-                  className={`${category.bgColor} rounded-3xl p-8 h-full premium-card border border-kerala-gold/10 hover:border-kerala-gold/30 group`}
+                  className="bg-white hover:bg-kerala-beige/35 rounded-3xl p-8 h-full border border-kerala-gold/15 hover:border-kerala-green/30 hover:shadow-2xl hover:shadow-kerala-green/10 group transition-all duration-300 flex flex-col justify-between"
                 >
-                  <div className="mb-6">{category.icon}</div>
-                  <h3 className="text-2xl font-bold text-kerala-dark mb-2">
-                    {category.title}
-                  </h3>
-                  <p className="text-kerala-green font-medium mb-3">
-                    {category.subtitle}
-                  </p>
-                  <p className="text-kerala-dark/60 mb-6">
-                    {category.description}
-                  </p>
-                  <div className="flex items-center text-kerala-green font-medium">
+                  <div>
+                    <div className="mb-6 w-20 h-20 rounded-2xl bg-kerala-ivory flex items-center justify-center border border-kerala-gold/10 group-hover:scale-105 transition-transform duration-300">
+                      {category.icon}
+                    </div>
+                    <h3 className="text-2xl font-serif font-bold text-kerala-dark mb-2 group-hover:text-kerala-green transition-colors duration-300">
+                      {category.title}
+                    </h3>
+                    <p className="text-kerala-green font-serif italic text-sm tracking-wider font-semibold mb-4">
+                      {category.subtitle}
+                    </p>
+                    <p className="text-kerala-dark/60 font-sans text-sm leading-relaxed mb-6">
+                      {category.description}
+                    </p>
+                  </div>
+                  <div className="flex items-center text-kerala-green font-serif tracking-wider font-bold text-sm">
                     <span>Explore Templates</span>
                     <svg
-                      className="w-5 h-5 ml-2 transition-transform group-hover:translate-x-2"
+                      className="w-4 h-4 ml-2 transition-transform group-hover:translate-x-2"
                       fill="none"
                       stroke="currentColor"
                       viewBox="0 0 24 24"
@@ -127,7 +133,7 @@ export function ReligionCategories() {
                       <path
                         strokeLinecap="round"
                         strokeLinejoin="round"
-                        strokeWidth={2}
+                        strokeWidth={2.5}
                         d="M17 8l4 4m0 0l-4 4m4-4H3"
                       />
                     </svg>

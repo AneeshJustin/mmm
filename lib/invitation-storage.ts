@@ -44,6 +44,7 @@ export function toScrollStoryData(data: {
   venue: string
   venueAddress: string
   couplePhoto: string | null
+  musicFile?: string | null
 }): StoredInvitationData {
   return {
     brideName: data.brideName,
@@ -56,5 +57,6 @@ export function toScrollStoryData(data: {
     venue: data.venue,
     venueAddress: data.venueAddress,
     couplePhoto: data.couplePhoto,
+    musicFile: data.musicFile || null,
   }
 }

@@ -49,9 +49,8 @@ export function TemplatePreview({ template }: { template: Template }) {
 
   return (
     <div
-      className={`relative w-full h-full bg-gradient-to-br ${bgGradients[template.religion]} p-6 flex flex-col items-center justify-center`}
+      className={`relative w-full h-full bg-gradient-to-br ${bgGradients[template.religion]} flex flex-col items-center justify-center`}
     >
-      <div className="absolute inset-4 border-2 border-kerala-gold/30 rounded-lg" />
       {template.religion === "hindu" && <HinduDecor />}
       {template.religion === "muslim" && <MuslimDecor />}
       {template.religion === "christian" && <ChristianDecor />}

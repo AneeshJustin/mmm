@@ -26,7 +26,7 @@ const footerLinks = {
 
 export function Footer() {
   return (
-    <footer className="bg-kerala-dark relative overflow-hidden">
+    <footer className="bg-white relative overflow-hidden pt-20 pb-12 border-t border-gray-200">
       {/* Decorative Pattern */}
       <div className="absolute inset-0 opacity-5">
         <svg
@@ -42,48 +42,46 @@ export function Footer() {
             height="20"
             patternUnits="userSpaceOnUse"
           >
-            <circle cx="10" cy="10" r="1" fill="#d4af37" />
+            <circle cx="10" cy="10" r="1" fill="#000000" />
           </pattern>
           <rect width="100%" height="100%" fill="url(#footer-pattern)" />
         </svg>
       </div>
 
-      {/* Top Border Decoration */}
-      <div className="h-1 bg-gradient-to-r from-transparent via-kerala-gold to-transparent" />
-
-      <div className="max-w-7xl mx-auto px-4 py-16 relative z-10">
-        <div className="grid md:grid-cols-2 lg:grid-cols-5 gap-12">
-          {/* Brand */}
-          <div className="lg:col-span-2">
-            <Link href="/" className="flex items-center gap-3 mb-6">
-              <div className="w-12 h-12 rounded-full bg-kerala-gold/20 flex items-center justify-center">
-                <svg viewBox="0 0 40 40" className="w-8 h-8 text-kerala-gold">
-                  <path
-                    fill="currentColor"
-                    d="M20 5c-1 0-2 1-2 2v3c0 1-1 2-2 2s-2-1-2-2V8c0-1-1-2-2-2s-2 1-2 2v7c0 6 4 11 10 12v8h-4v2h12v-2h-4v-8c6-1 10-6 10-12V8c0-1-1-2-2-2s-2 1-2 2v2c0 1-1 2-2 2s-2-1-2-2V7c0-1-1-2-2-2z"
-                  />
-                </svg>
-              </div>
-              <div>
-                <h3 className="text-xl font-bold text-kerala-ivory">
-                  Kerala Vivah
-                </h3>
-                <p className="text-xs text-kerala-gold tracking-widest uppercase">
-                  Premium Invitations
-                </p>
-              </div>
-            </Link>
-            <p className="text-kerala-ivory/60 mb-6 max-w-sm">
-              Create beautiful, personalized wedding invitations that celebrate
-              the rich traditions and culture of Kerala weddings.
-            </p>
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-12 mb-16">
+          {/* Brand & Identity */}
+          <div className="lg:col-span-2 flex flex-col justify-between">
+            <div>
+              <Link href="/" className="flex items-center gap-3 mb-6 group">
+                <div className="w-11 h-11 rounded-full bg-black/5 flex items-center justify-center border border-gray-200 group-hover:scale-105 transition-transform duration-300">
+                  <svg viewBox="0 0 40 40" className="w-6 h-6 text-black">
+                    <path
+                      fill="currentColor"
+                      d="M20 5c-1 0-2 1-2 2v3c0 1-1 2-2 2s-2-1-2-2V8c0-1-1-2-2-2s-2 1-2 2v7c0 6 4 11 10 12v8h-4v2h12v-2h-4v-8c6-1 10-6 10-12V8c0-1-1-2-2-2s-2 1-2 2v2c0 1-1 2-2 2s-2-1-2-2V7c0-1-1-2-2-2z"
+                    />
+                  </svg>
+                </div>
+                <div>
+                  <h3 className="text-2xl font-serif font-bold text-black tracking-wide uppercase group-hover:text-gray-600 transition-colors duration-300">
+                    Kerala Vivah
+                  </h3>
+                  <p className="text-[10px] text-gray-500 tracking-[0.25em] uppercase font-sans font-semibold">
+                    Premium Invitations
+                  </p>
+                </div>
+              </Link>
+              <p className="text-gray-500 font-sans text-sm leading-relaxed mb-6 max-w-sm font-light">
+                Beautiful, personalized web invitations and dynamic cinematic video templates that honor the sacred traditions and cultural aesthetics of Kerala weddings.
+              </p>
+            </div>
             {/* Social Links */}
-            <div className="flex gap-4">
+            <div className="flex gap-3 mt-4">
               {["facebook", "instagram", "twitter", "youtube"].map((social) => (
                 <a
                   key={social}
                   href={`#${social}`}
-                  className="w-10 h-10 rounded-full bg-kerala-gold/10 flex items-center justify-center text-kerala-gold hover:bg-kerala-gold hover:text-kerala-dark transition-all duration-300"
+                  className="w-10 h-10 rounded-full bg-gray-100 border border-gray-200 flex items-center justify-center text-gray-500 hover:text-white hover:bg-black hover:border-black transition-all duration-300"
                 >
                   <SocialIcon name={social} />
                 </a>
@@ -91,17 +89,17 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Links */}
+          {/* Links 1: Templates */}
           <div>
-            <h4 className="text-kerala-gold font-semibold mb-4 uppercase tracking-wider text-sm">
-              Templates
+            <h4 className="text-black font-serif font-bold mb-5 uppercase tracking-widest text-xs">
+              Collections
             </h4>
             <ul className="space-y-3">
               {footerLinks.templates.map((link) => (
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-kerala-ivory/60 hover:text-kerala-gold transition-colors"
+                    className="text-gray-500 hover:text-black font-sans text-sm tracking-wide transition-colors font-light"
                   >
                     {link.label}
                   </Link>
@@ -110,8 +108,9 @@ export function Footer() {
             </ul>
           </div>
 
+          {/* Links 2: Company */}
           <div>
-            <h4 className="text-kerala-gold font-semibold mb-4 uppercase tracking-wider text-sm">
+            <h4 className="text-black font-serif font-bold mb-5 uppercase tracking-widest text-xs">
               Company
             </h4>
             <ul className="space-y-3">
@@ -119,7 +118,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-kerala-ivory/60 hover:text-kerala-gold transition-colors"
+                    className="text-gray-500 hover:text-black font-sans text-sm tracking-wide transition-colors font-light"
                   >
                     {link.label}
                   </Link>
@@ -128,8 +127,9 @@ export function Footer() {
             </ul>
           </div>
 
+          {/* Links 3: Support */}
           <div>
-            <h4 className="text-kerala-gold font-semibold mb-4 uppercase tracking-wider text-sm">
+            <h4 className="text-black font-serif font-bold mb-5 uppercase tracking-widest text-xs">
               Support
             </h4>
             <ul className="space-y-3">
@@ -137,7 +137,7 @@ export function Footer() {
                 <li key={link.href}>
                   <Link
                     href={link.href}
-                    className="text-kerala-ivory/60 hover:text-kerala-gold transition-colors"
+                    className="text-gray-500 hover:text-black font-sans text-sm tracking-wide transition-colors font-light"
                   >
                     {link.label}
                   </Link>
@@ -145,16 +145,39 @@ export function Footer() {
               ))}
             </ul>
           </div>
+
+          {/* Newsletter / Stay Updated (Missingpiece style) */}
+          <div className="lg:col-span-1">
+            <h4 className="text-black font-serif font-bold mb-5 uppercase tracking-widest text-xs">
+              Newsletter
+            </h4>
+            <p className="text-xs text-gray-500 mb-4 font-sans font-light leading-relaxed">
+              Stay updated when new template drops and feature releases are launched.
+            </p>
+            <form onSubmit={(e) => e.preventDefault()} className="space-y-2.5">
+              <input
+                type="email"
+                placeholder="Email Address"
+                className="w-full px-4 py-2.5 rounded-xl bg-gray-50 border border-gray-200 text-gray-900 text-xs focus:outline-none focus:border-black transition-colors font-sans"
+              />
+              <button
+                type="submit"
+                className="w-full px-4 py-2.5 rounded-xl bg-black hover:bg-gray-800 text-white font-serif tracking-wider font-semibold text-xs transition-colors duration-300"
+              >
+                Subscribe
+              </button>
+            </form>
+          </div>
         </div>
 
         {/* Bottom */}
-        <div className="mt-16 pt-8 border-t border-kerala-gold/20">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
-            <p className="text-kerala-ivory/40 text-sm">
-              2024 Kerala Vivah. All rights reserved.
+        <div className="mt-16 pt-8 border-t border-gray-200">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-center md:text-left">
+            <p className="text-gray-400 font-sans text-xs tracking-wider font-light">
+              &copy; {new Date().getFullYear()} Kerala Vivah. All rights reserved.
             </p>
-            <p className="text-kerala-ivory/40 text-sm">
-              Made with love for Kerala weddings
+            <p className="text-gray-400 font-sans text-xs tracking-wider font-light italic">
+              Crafted with devotion for beautiful Kerala weddings
             </p>
           </div>
         </div>

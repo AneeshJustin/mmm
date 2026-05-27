@@ -37,6 +37,7 @@ import {
   Heart,
   ExternalLink,
   ShoppingCart,
+  Music,
 } from "lucide-react";
 
 interface InvitationData {
@@ -51,6 +52,7 @@ interface InvitationData {
   message: string;
   couplePhoto: string | null;
   fontStyle: string;
+  musicFile: string | null;
 }
 
 const fontOptions = [
@@ -87,6 +89,7 @@ export default function EditorPage() {
       "Together with our families, we invite you to celebrate our wedding",
     couplePhoto: null,
     fontStyle: "font-serif",
+    musicFile: null,
   });
 
   const updateField = (field: keyof InvitationData, value: string) => {
@@ -99,6 +102,17 @@ export default function EditorPage() {
       const reader = new FileReader();
       reader.onloadend = () => {
         setData((prev) => ({ ...prev, couplePhoto: reader.result as string }));
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  const handleMusicUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setData((prev) => ({ ...prev, musicFile: reader.result as string }));
       };
       reader.readAsDataURL(file);
     }
@@ -189,11 +203,16 @@ export default function EditorPage() {
   const shareInvitation = async () => {
     console.log("Sharing invitation with data:", data);
 
+    // Save data before sharing
+    if (isStoryTemplate) {
+      saveInvitationData(templateId, toScrollStoryData(data));
+    } else {
+      saveInvitationData(templateId, toScrollStoryData(data));
+    }
+
     const url =
       typeof window !== "undefined"
-        ? isStoryTemplate
-          ? `${window.location.origin}/invitation/${templateId}`
-          : window.location.href
+        ? `${window.location.origin}/invitation/${templateId}`
         : "";
 
     const text = `${data.brideName} & ${data.groomName} — Wedding Invitation`;
@@ -570,6 +589,46 @@ export default function EditorPage() {
                   </div>
                 </div>
 
+                {/* Music Upload */}
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-kerala-dark flex items-center gap-2">
+                    <Music size={18} className="text-kerala-gold" />
+                    Background Music
+                  </h3>
+                  <div className="border-2 border-dashed border-kerala-gold/30 rounded-lg p-6 text-center">
+                    {data.musicFile ? (
+                      <div className="space-y-3">
+                        <audio
+                          src={data.musicFile}
+                          controls
+                          className="mx-auto"
+                        />
+                        <button
+                          onClick={() =>
+                            setData((prev) => ({ ...prev, musicFile: null }))
+                          }
+                          className="text-sm text-red-600 hover:underline"
+                        >
+                          Remove music
+                        </button>
+                      </div>
+                    ) : (
+                      <label className="cursor-pointer">
+                        <div className="text-kerala-dark/50 mb-2">
+                          <Music size={32} className="mx-auto mb-2" />
+                          Click to upload music
+                        </div>
+                        <input
+                          type="file"
+                          accept="audio/*"
+                          onChange={handleMusicUpload}
+                          className="hidden"
+                        />
+                      </label>
+                    )}
+                  </div>
+                </div>
+
                 {/* Font Style */}
                 <div className="space-y-4">
                   <h3 className="font-semibold text-kerala-dark flex items-center gap-2">
@@ -698,6 +757,16 @@ function InvitationPreview({
       data-religion={template.religion}
       className={`${data.fontStyle} aspect-[3/4] bg-gradient-to-br ${bgGradients[template.religion]} rounded-lg overflow-hidden relative`}
     >
+      {/* Background Music */}
+      {data.musicFile && (
+        <audio
+          src={data.musicFile}
+          autoPlay
+          loop
+          className="hidden"
+        />
+      )}
+
       {/* Decorative Border */}
       <div className="absolute inset-3 border-2 border-kerala-gold/40 rounded-lg" />
       <div className="absolute inset-4 border border-kerala-gold/20 rounded-lg" />

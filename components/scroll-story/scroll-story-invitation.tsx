@@ -37,6 +37,7 @@ export interface ScrollStoryData {
   venue: string;
   venueAddress: string;
   couplePhoto: string | null;
+  musicFile?: string | null;
 }
 
 interface ScrollStoryInvitationProps {
@@ -186,6 +187,16 @@ export function ScrollStoryInvitation({
       )}
       style={compact ? undefined : { scrollSnapType: "y mandatory" }}
     >
+      {/* Background Music */}
+      {data.musicFile && (
+        <audio
+          src={data.musicFile}
+          autoPlay
+          loop
+          className="hidden"
+        />
+      )}
+
       {/* 1 — Hero: real video + sky lanterns */}
       <CinematicVideoSection
         video={videos.hero}

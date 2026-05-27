@@ -1,6 +1,7 @@
 "use client";
 
-import { motion } from "framer-motion";
+import { useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 import Link from "next/link";
 import { TemplateCoverflowCarousel } from "@/components/template-coverflow-carousel";
 import { TemplatePreview } from "@/components/template-preview";
@@ -145,50 +146,94 @@ export const templates: Template[] = [
 ];
 
 export function FeaturedTemplates() {
+  const [activeFilter, setActiveFilter] = useState<string>("all");
+
+  const filters = [
+    { id: "all", label: "All Templates" },
+    { id: "hindu", label: "Hindu" },
+    { id: "muslim", label: "Muslim" },
+    { id: "christian", label: "Christian" },
+    { id: "story", label: "Cinematic Stories" },
+  ];
+
+  const filteredTemplates = templates.filter((template) => {
+    if (activeFilter === "all") return true;
+    if (activeFilter === "story") return template.type === "story";
+    return template.religion === activeFilter;
+  });
+
   return (
-    <section className="py-24 bg-kerala-beige">
-      <div className="max-w-7xl mx-auto px-4">
+    <section className="py-24 bg-kerala-beige/35 relative overflow-hidden">
+      {/* Background soft glow */}
+      <div className="absolute inset-0 radial-glow-gold opacity-30 pointer-events-none" />
+
+      <div className="max-w-7xl mx-auto px-4 relative z-10">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6 }}
-          className="text-center mb-16"
+          className="text-center mb-10"
         >
-          <span className="inline-block px-4 py-2 bg-kerala-green/10 text-kerala-green rounded-full text-sm font-medium tracking-widest uppercase mb-4">
-            All Religions
+          <span className="inline-block px-4 py-2 bg-kerala-green/10 text-kerala-green rounded-full text-xs font-semibold tracking-[0.25em] uppercase mb-4">
+            Premium Designs
           </span>
-          <h2 className="text-4xl md:text-5xl font-bold text-kerala-dark mb-4">
-            Hindu, Muslim & <span className="text-kerala-green">Christian</span>
+          <h2 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-kerala-dark mb-4">
+            Invite in <span className="text-kerala-green italic font-medium">Style</span>
           </h2>
-          <p className="text-xl text-kerala-dark/60 max-w-2xl mx-auto">
-            Browse every template — {templates.length} designs across all Kerala
-            wedding traditions
+          <p className="text-lg md:text-xl text-kerala-dark/65 max-w-2xl mx-auto font-sans font-light">
+            Choose from modern, responsive invitation websites featuring custom animations, live RSVP trackers, and sacred traditional motifs.
           </p>
         </motion.div>
 
+        {/* Filter Pills */}
         <motion.div
-          initial={{ opacity: 0, y: 24 }}
+          initial={{ opacity: 0, y: 15 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.7, delay: 0.15 }}
+          transition={{ duration: 0.5, delay: 0.1 }}
+          className="flex flex-wrap justify-center gap-3 mb-12"
+        >
+          {filters.map((filter) => {
+            const isActive = activeFilter === filter.id;
+            return (
+              <button
+                key={filter.id}
+                onClick={() => setActiveFilter(filter.id)}
+                className={`px-6 py-2.5 rounded-full text-sm font-serif tracking-wider font-semibold transition-all duration-300 border ${
+                  isActive
+                    ? "bg-kerala-green text-kerala-ivory border-kerala-green shadow-lg shadow-kerala-green/10 transform scale-105"
+                    : "bg-white text-kerala-dark hover:bg-kerala-beige/40 border-kerala-gold/15"
+                }`}
+              >
+                {filter.label}
+              </button>
+            );
+          })}
+        </motion.div>
+
+        <motion.div
+          key={activeFilter}
+          initial={{ opacity: 0, scale: 0.98 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
           className="overflow-hidden rounded-3xl"
         >
-          <TemplateCoverflowCarousel items={templates} />
+          <TemplateCoverflowCarousel items={filteredTemplates} />
         </motion.div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
-          transition={{ duration: 0.6, delay: 0.4 }}
-          className="text-center mt-12"
+          transition={{ duration: 0.6, delay: 0.3 }}
+          className="text-center mt-14"
         >
           <Link
             href="/templates"
-            className="inline-flex items-center px-8 py-4 bg-kerala-green text-kerala-ivory rounded-full font-semibold text-lg hover:bg-kerala-dark transition-all duration-300"
+            className="inline-flex items-center px-9 py-4 bg-kerala-green text-kerala-ivory rounded-full font-serif font-bold tracking-wider text-lg hover:bg-kerala-dark transition-all duration-300 hover:shadow-xl hover:shadow-kerala-green/15"
           >
-            View All Templates
+            Explore All {templates.length} Templates
             <svg
               className="w-5 h-5 ml-2"
               fill="none"
@@ -198,7 +243,7 @@ export function FeaturedTemplates() {
               <path
                 strokeLinecap="round"
                 strokeLinejoin="round"
-                strokeWidth={2}
+                strokeWidth={2.5}
                 d="M17 8l4 4m0 0l-4 4m4-4H3"
               />
             </svg>
