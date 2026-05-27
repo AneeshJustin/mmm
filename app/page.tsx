@@ -2,6 +2,8 @@ import { Navbar } from "@/components/navbar"
 import { HeroSection } from "@/components/hero-section"
 import { ReligionCategories } from "@/components/religion-categories"
 import { FeaturedTemplates } from "@/components/featured-templates"
+import { ReinventedSection } from "@/components/reinvented-section"
+import { HowItWorksSection } from "@/components/how-it-works-section"
 import { FeaturesSection } from "@/components/features-section"
 import { ComparisonTable } from "@/components/comparison-table"
 import { TestimonialsSection } from "@/components/testimonials-section"
@@ -16,6 +18,8 @@ export default function HomePage() {
       <HeroSection />
       <ReligionCategories />
       <FeaturedTemplates />
+      <ReinventedSection />
+      <HowItWorksSection />
       <FeaturesSection />
       <ComparisonTable />
       <TestimonialsSection />
