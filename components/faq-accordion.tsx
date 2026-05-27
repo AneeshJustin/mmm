@@ -65,6 +65,7 @@ export function FAQAccordion() {
         {/* FAQ list */}
         <div className="space-y-4">
           {faqs.map((faq, index) => {
+
             const isOpen = activeIndex === index;
             return (
               <motion.div
@@ -109,6 +110,27 @@ export function FAQAccordion() {
             );
           })}
         </div>
+
+        {/* Email CTA */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.5, delay: 0.2 }}
+          className="flex justify-center mt-12"
+        >
+          <a
+            href="https://mail.google.com/mail/?view=cm&fs=1&to=sudhi@metquay.com&su=Wedding%20Invitation%20Enquiry"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-black text-white rounded-full text-sm font-semibold hover:bg-gray-800 transition-colors duration-300 shadow-lg"
+          >
+            Any other question?{" "}
+            <span className="bg-gradient-to-r from-cyan-400 via-pink-400 to-yellow-400 bg-clip-text text-transparent font-bold">
+              Email Us
+            </span>
+          </a>
+        </motion.div>
       </div>
     </section>
   );

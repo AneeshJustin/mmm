@@ -4,6 +4,7 @@ import { ReligionCategories } from "@/components/religion-categories"
 import { FeaturedTemplates } from "@/components/featured-templates"
 import { ReinventedSection } from "@/components/reinvented-section"
 import { HowItWorksSection } from "@/components/how-it-works-section"
+import { SimpleComparisonSection } from "@/components/simple-comparison-section"
 import { FeaturesSection } from "@/components/features-section"
 import { ComparisonTable } from "@/components/comparison-table"
 import { TestimonialsSection } from "@/components/testimonials-section"
@@ -20,6 +21,7 @@ export default function HomePage() {
       <FeaturedTemplates />
       <ReinventedSection />
       <HowItWorksSection />
+      <SimpleComparisonSection />
       <FeaturesSection />
       <ComparisonTable />
       <TestimonialsSection />
